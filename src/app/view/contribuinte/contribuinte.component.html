@@ -1,0 +1,75 @@
+
+
+	<div class="mb-3">
+		<form class="form m-3 needs-validation ng" [formGroup]="fc" (keypress)="makeContribuinte()">
+
+			<label class="form-label">Nome</label>
+      <div class="col-md-4">
+
+        <input
+        type="text"
+        placeholder="Nome"
+        maxlength="50"
+        formControlName="nomeCompleto"
+        [ngClass]="{'form-control': true,
+        'border border-2 border-danger': !fc.get('nomeCompleto')?.valid,
+        'border border-2 border-success': fc.get('nomeCompleto')?.valid
+      }"
+       >
+
+
+      </div>
+
+      <label class="form-label">CPF</label>
+			<input
+          minlength="11"
+          maxlength="14"
+          type="text"
+          formControlName="cpf"
+          [ngClass]="{'form-control': true,
+        'border border-2 border-danger': !fc.get('cpf')?.valid,
+        'border border-2 border-success': fc.get('cpf')?.valid
+      }"
+          >
+          <div class="invalid-feedback">
+            Preencha o CPF
+          </div>
+		</form>
+		<button class="btn btn-lg btn-success m-3"
+      [disabled]="atualizar"
+      [disabled]="fc.invalid"
+      (click)="insertContribuinte()">Enviar</button>
+    <button class="btn btn-lg btn-warning m-3" *ngIf="atualizar" (click)="update()">Atualizar</button>
+
+	</div>
+
+    <table  class="table m-3">
+      <thead>
+        <th>Id</th>
+        <th>Nome Completo</th>
+        <th>CPF</th>
+        <th>Edit</th>
+
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of listaContribuintes" [ngClass]="{'table-warning': contribuinte.id === c.id}" >
+
+          <td> {{c.id}}</td>
+          <td> {{c.nomeCompleto}}</td>
+          <td>{{c.cpf}}</td>
+          <td>
+            <svg (click)="edit(c)"  xmlns="http://www.w3.org/2000/svg" width="20" height="20" role="button" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+          </svg><span class="m-2">
+            <svg (click)="delete(c)" xmlns="http://www.w3.org/2000/svg" width="20" role="button" height="20" fill="currentColor" class="bi bi-trash pe-auto" viewBox="0 0 16 16">
+              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+              <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+            </svg>
+          </span>
+        </td>
+        </tr>
+      </tbody>
+
+    </table>
+

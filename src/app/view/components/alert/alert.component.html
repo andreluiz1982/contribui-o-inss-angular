@@ -1,0 +1,24 @@
+<div *ngIf="msg != ''"
+  class="p-5 text-danger text-bg-secondary position-fixed top-50
+          start-50 translate-middle rounded">
+  <mat-icon role="button"
+    (click)="msg = ''"
+    style="transform: scale(2);"
+    class="mat-18 text-danger position-absolute top-0 end-0 m-2"
+    title="Clique para fechar"
+    >close</mat-icon>
+  <h1 >{{msg}}</h1>
+</div>
+
+
+<div *ngIf="successMsg != ''"
+  class="p-5 text-light text-bg-success position-fixed top-50
+          start-50 translate-middle rounded">
+  <mat-icon role="button"
+    (click)="successMsg = ''"
+    style="transform: scale(2);"
+    class="mat-18 text-light position-absolute top-0 end-0 m-2"
+    title="Clique para fechar"
+    >close</mat-icon>
+  <h1 >{{successMsg}}</h1>
+</div>

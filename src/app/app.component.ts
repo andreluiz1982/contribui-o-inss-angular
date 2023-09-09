@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'contribuicao-inss-angular2';
+  title = 'angular-contribuicao-inss';
 }

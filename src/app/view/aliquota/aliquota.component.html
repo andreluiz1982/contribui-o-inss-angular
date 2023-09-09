@@ -1,0 +1,116 @@
+
+
+<div class="container">
+
+  <div class="row">
+
+    <div class="m-2 p-2 col-lg-5">
+      <label class="form-label">Ano-Mês</label>
+    <input class="form-control"
+    accept="text"
+    required="true"
+    name="aliquota.anoMes"
+    [(ngModel)]="aliquota.anoMes"
+    placeholder="Formato Ano-Mês Ex: 2015-02" id="anoMes">
+		<div id="form" class="m-2 border border-info rounded">
+
+      <table class="table">
+        <tr>
+          <th>#</th>
+          <th>Mín.</th>
+          <th>Máx.</th>
+          <th>Alíq.</th>
+        </tr>
+        <ng-container *ngFor="let f of aliquota.faixasAliquotas;let i = index;">
+
+          <tr
+              title="Ao trocar de linha com tab outra será adicionada" >
+
+              <td><b class="m1">{{i+1}}</b> </td>
+
+              <td><input class="form-control"
+                accept="text"
+                [(ngModel)]="f.valorMinimo"
+                [name]="f.valorMinimo"
+                  placeholder="Valor Mínimo"></td>
+
+            <td><input
+                  class="form-control"
+                  accept="text"
+                  [(ngModel)]="f.valorMaximo"
+                  [name]="f.valorMaximo"
+                  placeholder="Valor Máximo"></td>
+
+                  <td><input
+                    class="form-control"
+                  accept="text"
+                  (keydown.tab)="addFaixas()"
+                  [(ngModel)]="f.aliquota"
+                  [name]="f.aliquota"
+                  placeholder="Alíquota Ex: 7.5"
+                  ></td>
+
+                </tr>
+              </ng-container>
+            </table>
+            <button role="button" (click)="addFaixas()" class="btn btn-lg btn-info m-2 text-light">
+
+              <mat-icon  class="material-icons me-2 fs-2">
+                add_circle_outline
+
+            </mat-icon> Faixa
+          </button>
+
+		</div>
+		<button class="btn btn-lg btn-success m-3" [disabled]="atualizar" (click)="enviar()">Enviar</button>
+    <button class="btn btn-lg btn-warning m-3" *ngIf="atualizar" (click)="update()">Atualizar</button>
+
+
+	</div>
+		<div class="response m-3 col-lg-5 border border-secondary rounded" id="response">
+      <table  class="table">
+        <thead>
+          <th>Ano-Mês</th>
+          <th>Faixas Alíquota</th>
+          <th>Edit</th>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of aliquotas" [ngClass]="{'table-warning': aliquota.id === a.id}">
+            <td>{{a.anoMes}}</td>
+
+            <td>
+
+              <table>
+                <tr  *ngFor="let f of a.faixasAliquotas">
+                  <td>Mín. {{f.valorMinimo | currency}}</td>
+                  <td class="ml-1">Máx. {{f.valorMaximo | currency}}</td>
+                  <td class="ml-1 mr-1"> Alíq. {{+f.aliquota}}</td>
+                </tr>
+
+              </table>
+
+
+            </td>
+
+            <td>
+              <svg (click)="edit(a)"  xmlns="http://www.w3.org/2000/svg" width="20" height="20" role="button" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+              </svg><span class="m-2">
+                <svg (click)="delete(a)" xmlns="http://www.w3.org/2000/svg" width="20" role="button" height="20" fill="currentColor" class="bi bi-trash pe-auto" viewBox="0 0 16 16">
+                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                </svg>
+              </span>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+		</div>
+
+  </div>
+  </div>
+
+
