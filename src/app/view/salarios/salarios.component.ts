@@ -36,44 +36,51 @@ export class SalariosComponent implements OnInit {
 
   salario = new SalarioContribuicaoImpl();
 
-  salarios: SalarioContribuicao[] = [];
-
   contribuicaoTotal: ContribuicaoTotal = new ContribuicaoTotalImpl();
 
+  salarioForm = this.formBuilder.group(
+    {
+      anoMes: ['', [Validators.required, Validators.pattern(/[0-9-]{7}/gm)]],
 
-  componentesIncidencia = this.formBuilder.array<FormGroup>(
-      [this.formBuilder.group(
-        {
-          valorComponente: ['', [
-            Validators.required,
-            Validators.pattern(/[0-9.,]+/gm)]],
-           descricao: ['']
-          })]);
-
-  salarioForm = this.formBuilder.group({
-    anoMes: new FormControl<string>('', [
-      Validators.required,
-      Validators.pattern(/[0-9-]{7}/gm),
-    ])
-
-  });
-
-  addComponente() {
-    this.componentesIncidencia.push(this.formBuilder.group(
-      {
-        valorComponente: ['', [
-          Validators.required,
-          Validators.pattern(/[0-9.,]+/gm)]],
-         descricao: ['']
-        }));
-
-  }
-
+    componentesIncidencia: this.formBuilder.array<FormGroup>([
+    ]
+    )}
+  );
   ngOnInit(): void {
+    this.makeForm();
+
     this.contrService.getAllContribuinte().subscribe((r) => {
       this.contribuintes = r.body;
     });
   }
+    makeForm(){
+      this.salarioForm = this.formBuilder.group(
+        {
+          anoMes: ['', [Validators.required, Validators.pattern(/[0-9-]{7}/gm)]],
+
+        componentesIncidencia: this.formBuilder.array<FormGroup>([
+
+        ]
+        )}
+      );
+      this.addComponente();
+    }
+
+  getComponentesIncidencia() {
+    return this.salarioForm.controls.componentesIncidencia;
+  }
+  addComponente() {
+    this.salarioForm.controls.componentesIncidencia.push(
+      this.formBuilder.group({
+        valorComponente: [
+          '',
+          [Validators.required, Validators.pattern(/[0-9.,]+/gm)],
+        ],
+        descricao: [''],
+      })
+    );
+  }
+
   calculaContribuicoesINSS(idContribuinte: string) {
     this.salarioService.getContribuicoes(+idContribuinte).subscribe((r) => {
       // console.log(r.body)
@@ -86,33 +93,22 @@ export class SalariosComponent implements OnInit {
   loadSalarios(cont: Contribuinte) {
     this.contribuinteSelected = cont;
     this.calculaContribuicoesINSS(cont.id);
-    this.salarios = cont.salariosContribuicao;
+    this.makeForm();
     // console.log(this.salarios)
   }
 
   enviar() {
-    let valores:any = [];
-    this.salario.contribuinte.id = this.contribuinteSelected.id;
-    if (this.componentesIncidencia.valid && this.salarioForm.valid) {
-      this.salario.anoMes = this.salarioForm.get('anoMes')?.value + '';
-        this.componentesIncidencia.controls.forEach(c => {
-          valores.push(c.value)
-        })
 
-      this.salario.componentesIncidencia = valores;
-      console.log(this.salario)
-    } else {
-      this.msgService.showError('Erro!');
-    }
     this.cleanComponentes();
-    this.salarioService.insert(this.salario).subscribe(r=> {
-      if(r){
-        this.msgService.showSucess(`Salário do ${this.salario.anoMes} do contribuinte ${this.salario.contribuinte.nomeCompleto} incluído com sucesso!`)
+    this.salarioService.insert(this.salario).subscribe((r) => {
+      if (r) {
+        this.msgService.showSucess(
+          `Salário do ${this.salario.anoMes} do contribuinte ${this.salario.contribuinte.nomeCompleto} incluído com sucesso!`
+        );
         this.loadSalarios(this.salario.contribuinte);
       }
-    this.salarioForm.reset();
-    this.componentesIncidencia.reset();
-    })
+      this.salarioForm.reset();
+    });
   }
   private atualizaSelectedContribuinte() {
     this.contrService
@@ -125,8 +121,26 @@ export class SalariosComponent implements OnInit {
 
   edit(sal: SalarioContribuicao) {
     this.atualizar = !this.atualizar;
+    this.salario = sal;
     if (this.atualizar) {
-      this.salario = sal;
+      this.salarioForm.reset();
+
+      this.salarioForm.controls.anoMes.setValue(sal.anoMes);
+      this.salarioForm.controls.componentesIncidencia.controls =
+      this.salarioForm.controls.componentesIncidencia.controls.slice(1);
+
+      sal.componentesIncidencia.forEach(c => {
+
+        this.salarioForm.controls.componentesIncidencia.push(
+          this.formBuilder.group({
+          valorComponente: [
+            c.valorComponente,
+            [Validators.required, Validators.pattern(/[0-9.,]+/gm)],
+          ],
+          descricao: [c.descricao],
+        }))
+      })
+
     } else {
       this.salario = new SalarioContribuicaoImpl();
     }
@@ -163,14 +177,35 @@ export class SalariosComponent implements OnInit {
   }
 
   private cleanComponentes() {
-    this.salario.componentesIncidencia =
-      this.salario.componentesIncidencia.filter((c) => {
-        if (c.descricao != '' && c.valorComponente != '') {
-          c.valorComponente = c.valorComponente.replace(',', '.');
-          return c;
-        } else {
-          return null;
-        }
+    let valores: any = [];
+    console.log(this.salario);
+
+    this.salario.contribuinte.id = this.contribuinteSelected.id;
+    if (this.salarioForm.valid) {
+      this.salario.anoMes = this.salarioForm.get('anoMes')?.value + '';
+      this.salarioForm.controls.componentesIncidencia.controls.forEach((c) => {
+        let valor = c.get('valorComponente')?.value;
+        let desc = c.get('descricao')?.value;
+        valores.push({
+          valorComponente: valor,
+          descricao : desc
+        });
+      });
+
+      this.salario.componentesIncidencia = valores;
+      console.log(this.salario);
+    } else {
+      this.msgService.showError('Erro!');
+    }
+
+      this.salario.componentesIncidencia.forEach((c) => {
+
+        c.valorComponente = c.valorComponente.replace(',', '.');
+        // if (c.descricao != '' && c.valorComponente!= '') {
+        //   return c;
+        // } else {
+        //   return null;
+        // }
       });
   }
 }

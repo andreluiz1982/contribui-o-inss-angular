@@ -26,31 +26,33 @@
             formControlName="anoMes"
             placeholder="Ano-Mês Ex. 2015-02">
 
+        <div formArrayName="componentesIncidencia">
 
-
-
-
-        <div  *ngFor="let c of componentesIncidencia.controls; index as i;">
-          <ng-container
+          <div
+            *ngFor="let c of getComponentesIncidencia().controls"
           class="componentes m-1 mt-2 border border-info rounded"
-          [formGroup]="c">
+          >
+          <div [formGroup]="c">
 
-          <label class="form-label">Componente salário - INSS</label>
-          <input
-            class="inputSalario form-control"
-            accept="text" required="true"
+
+            <label class="form-label">Componente salário - INSS</label>
+            <input
+            class="form-control"
+            accept="text"
             placeholder="Digite o valor"
             formControlName="valorComponente"
             >
 
-          <label class="form-label" for="descricao">Descrição (opcional) </label>
-          <input
-            class="inputDescricao form-control"
+            <label class="form-label">Descrição (opcional) </label>
+            <input
+            class="form-control"
             accept="text"
             placeholder="Descrição (opcional) Ex. Horas Extraordinárias"
             formControlName="descricao"
             (keydown.tab)="addComponente()">
 
+          </div>
+          </div>
           <button role="button" (click)="addComponente()" class="btn btn-lg btn-info m-2 text-light">
 
             <mat-icon class="material-icons me-2 fs-2">
@@ -58,18 +60,17 @@
 
             </mat-icon> Componente
           </button>
-        </ng-container>
         </div>
       </div>
     </form>
       <button class="btn btn-lg btn-success m-3"
         [disabled]="atualizar"
-        [disabled]="salarioForm.invalid &&
-        componentesIncidencia.get('valorComponente')?.invalid"
+        [disabled]="salarioForm.invalid"
 
         (click)="enviar()">Enviar</button>
 
-        <button class="btn btn-lg btn-warning m-3" *ngIf="atualizar" (click)="update()">Atualizar</button>
+        <button class="btn btn-lg btn-warning m-3"
+        *ngIf="atualizar" (click)="update()">Atualizar</button>
     </div>
 
 
@@ -89,7 +90,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let sal of salarios" [ngClass]="{'table-warning': salario.id === sal.id}">
+        <tr *ngFor="let sal of contribuinteSelected.salariosContribuicao" [ngClass]="{'table-warning': salario.id === sal.id}">
           <td>{{sal.anoMes}}</td>
           <td>
             <table>

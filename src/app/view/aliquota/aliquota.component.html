@@ -4,66 +4,67 @@
 
   <div class="row">
 
-    <div class="m-2 p-2 col-lg-5">
-      <label class="form-label">Ano-Mês</label>
-    <input class="form-control"
-    accept="text"
-    required="true"
-    name="aliquota.anoMes"
-    [(ngModel)]="aliquota.anoMes"
-    placeholder="Formato Ano-Mês Ex: 2015-02" id="anoMes">
-		<div id="form" class="m-2 border border-info rounded">
+    <form class="form" [formGroup]="form">
+      <div class="m-2 p-2 col-lg-5">
+        <label class="form-label">Ano-mês</label>
+        <input type="text" class="form-control"
+        formControlName="anoMes"
+        placeholder="Formato Ano-Mês Ex: 2015-02"
 
-      <table class="table">
-        <tr>
-          <th>#</th>
-          <th>Mín.</th>
-          <th>Máx.</th>
-          <th>Alíq.</th>
-        </tr>
-        <ng-container *ngFor="let f of aliquota.faixasAliquotas;let i = index;">
+        >
+      </div>
 
-          <tr
-              title="Ao trocar de linha com tab outra será adicionada" >
+      <div formArrayName="faixasAliquotas" class="border border-info rounded">
+        <div *ngFor="let f of getFaixasAliquotas(); let i = index;" class="m-2" >
+          <div [formGroup]="f" class="d-flex justify-content-around m-1 p-1 border border-rounded border-secondary">
+            <div>
 
-              <td><b class="m1">{{i+1}}</b> </td>
+              <label class="form-label">Minimo</label>
+              <input
+              type="text"
+              class="form-control"
+              formControlName="minimo"
+              placeholder="Valor Mínimo">
 
-              <td><input class="form-control"
-                accept="text"
-                [(ngModel)]="f.valorMinimo"
-                [name]="f.valorMinimo"
-                  placeholder="Valor Mínimo"></td>
+            </div>
+            <div>
 
-            <td><input
-                  class="form-control"
-                  accept="text"
-                  [(ngModel)]="f.valorMaximo"
-                  [name]="f.valorMaximo"
-                  placeholder="Valor Máximo"></td>
+              <label class="form-label">Maximo</label>
+              <input
+              type="text"
+              class="form-control"
+              formControlName="maximo"
+              placeholder="Valor Máximo">
+            </div>
+              <div>
 
-                  <td><input
-                    class="form-control"
-                  accept="text"
-                  (keydown.tab)="addFaixas()"
-                  [(ngModel)]="f.aliquota"
-                  [name]="f.aliquota"
-                  placeholder="Alíquota Ex: 7.5"
-                  ></td>
+                <label class="form-label">Aliquota</label>
+                <input type="text"
+                class="form-control"
+                formControlName="aliquota"
+                placeholder="Alíquota Ex: 7.5"
+                title="Pressione TAB para adicionar outro grupo"
 
-                </tr>
-              </ng-container>
-            </table>
-            <button role="button" (click)="addFaixas()" class="btn btn-lg btn-info m-2 text-light">
+                (keydown.tab)="addFaixas()">
+              </div>
+            </div>
+          </div>
+          <button role="button" (click)="addFaixas()" class="btn btn-lg btn-info m-2 text-light">
 
-              <mat-icon  class="material-icons me-2 fs-2">
-                add_circle_outline
+            <mat-icon  class="material-icons me-2 fs-2">
+              add_circle_outline
 
-            </mat-icon> Faixa
-          </button>
+          </mat-icon> Faixa
+        </button>
+      </div>
+    </form>
 
-		</div>
-		<button class="btn btn-lg btn-success m-3" [disabled]="atualizar" (click)="enviar()">Enviar</button>
-    <button class="btn btn-lg btn-warning m-3" *ngIf="atualizar" (click)="update()">Atualizar</button>
+<div class="d-flex flex-row">
+
+
+  <button class="btn btn-lg btn-success m-3" [disabled]="atualizar" (click)="enviar()">Enviar</button>
+  <button class="btn btn-lg btn-warning m-3" *ngIf="atualizar" (click)="update()">Atualizar</button>
+</div>
 
 
 	</div>
@@ -110,7 +111,6 @@
       </table>
 		</div>
 
-  </div>
   </div>
 
 

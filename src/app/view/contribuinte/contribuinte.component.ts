@@ -43,8 +43,9 @@ export class ContribuinteComponent implements OnInit {
   });
 
   makeContribuinte(){
+    let c = this.contribuinte;
     this.contribuinte = {
-      id: '',
+      id: c?.id == undefined ? '' : c.id,
       nomeCompleto: this.fc.get('nomeCompleto')?.value,
       cpf: this.fc.get('cpf')?.value,
       salariosContribuicao: []
@@ -76,22 +77,23 @@ export class ContribuinteComponent implements OnInit {
       if(this.atualizar){
 
         this.contribuinte = contrib;
+        this.fc.setValue({cpf: contrib.cpf, nomeCompleto: contrib.nomeCompleto})
       } else {
-        this.contribuinte = {
-          id: '',
-          cpf: '',
-          nomeCompleto: '',
-          salariosContribuicao: []
-        };
+        this.fc.reset();
+
       }
     }
     update(){
       if(confirm(`Confirmar atualizar Contribuinte ${this.contribuinte.nomeCompleto}?`)){
+        console.log(this.contribuinte)
+        this.makeContribuinte();
+        console.log('DEPOIS')
+        console.log(this.contribuinte)
 
         this.service.updateContribuinte(this.contribuinte, this.contribuinte.id).subscribe(r => {
           this.msgService.showSucess(`Contribuinte ${this.contribuinte.nomeCompleto} atualizado com sucesso!`);
           this.atualizar = false;
-          location.reload();
+          this.getAllContribuintes();
         })
       }
     }
