@@ -64,6 +64,8 @@ export class ContribuinteComponent implements OnInit {
   }
 
   insertContribuinte(){
+    this.makeContribuinte();
+    console.log(this.contribuinte)
     this.service.insertContribuinte(this.contribuinte).subscribe(r => {
       if(r){
         this.msgService.showSucess(`Contribuinte ${this.contribuinte.nomeCompleto} adicionado com sucesso`);
