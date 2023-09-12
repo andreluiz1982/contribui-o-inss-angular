@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { SalariosComponent } from './view/salarios/salarios.component';
 import { AliquotaComponent } from './view/aliquota/aliquota.component';
 import { ContribuinteComponent } from './view/contribuinte/contribuinte.component';
-import { AppComponent } from './app.component';
 
 const routes: Routes = [
 
