@@ -52,7 +52,10 @@ export class SalariosComponent implements OnInit {
     this.contrService.getAllContribuinte().subscribe((r) => {
       this.contribuintes = r.body;
     });
+
   }
+
+
     makeForm(){
       this.salarioForm = this.formBuilder.group(
         {
@@ -83,7 +86,7 @@ export class SalariosComponent implements OnInit {
 
   calculaContribuicoesINSS(idContribuinte: string) {
     this.salarioService.getContribuicoes(+idContribuinte).subscribe((r) => {
-      // console.log(r.body)
+      console.log(r.body)
       this.contribuicaoTotal = r.body;
       this.contribuinteSelected = this.contribuicaoTotal.contribuinte;
       // console.log(this.contribuicaoTotal)
@@ -92,6 +95,7 @@ export class SalariosComponent implements OnInit {
 
   loadSalarios(cont: Contribuinte) {
     this.contribuinteSelected = cont;
+
     this.calculaContribuicoesINSS(cont.id);
     this.makeForm();
     // console.log(this.salarios)
