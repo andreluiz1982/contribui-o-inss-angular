@@ -49,12 +49,16 @@ export class SalariosComponent implements OnInit {
   ngOnInit(): void {
     this.makeForm();
 
-    this.contrService.getAllContribuinte().subscribe((r) => {
-      this.contribuintes = r.body;
-    });
+    this.getAllContribuintes();
 
   }
 
+
+  private getAllContribuintes() {
+    this.contrService.getAllContribuinte().subscribe((r) => {
+      this.contribuintes = r.body;
+    });
+  }
 
     makeForm(){
       this.salarioForm = this.formBuilder.group(
@@ -86,7 +90,7 @@ export class SalariosComponent implements OnInit {
 
   calculaContribuicoesINSS(idContribuinte: string) {
     this.salarioService.getContribuicoes(+idContribuinte).subscribe((r) => {
-      console.log(r.body)
+      // console.log(r.body)
       this.contribuicaoTotal = r.body;
       this.contribuinteSelected = this.contribuicaoTotal.contribuinte;
       // console.log(this.contribuicaoTotal)
@@ -146,6 +150,7 @@ export class SalariosComponent implements OnInit {
       })
 
     } else {
+      this.makeForm();
       this.salario = new SalarioContribuicaoImpl();
     }
   }
@@ -158,31 +163,36 @@ export class SalariosComponent implements OnInit {
     // console.log(this.salario)
     if (confirm(`Confirmar atualizar Salário ${this.salario.anoMes}?`)) {
       this.salarioService
-        .update(this.salario, this.salario.id)
-        .subscribe((r) => {
-          this.msgService.showSucess(
-            `Salário ${this.salario.anoMes} atualizado com sucesso!`
+      .update(this.salario, this.salario.id)
+      .subscribe((r) => {
+        this.msgService.showSucess(
+          `Salário ${this.salario.anoMes} atualizado com sucesso!`
           );
-          this.salario = new SalarioContribuicaoImpl();
-          this.atualizar = false;
+          // this.salario = new SalarioContribuicaoImpl();
           this.loadSalarios(this.salario.contribuinte);
+          this.makeForm();
         });
+        this.atualizar = false;
+        // console.log(this.atualizar)
     }
   }
   delete(sal: SalarioContribuicao) {
     // console.log(sal)
+
     if (confirm(`Confirma excluir salário contribuição do mês ${sal.anoMes}`)) {
       this.salarioService.delete(sal.id).subscribe((r) => {
         if (r) {
-          this.loadSalarios(sal.contribuinte);
+          this.msgService.showSucess(`Salário do mês ${sal.anoMes} deletado com sucesso.`)
         }
       });
+      location.reload();
+
     }
   }
 
   private cleanComponentes() {
     let valores: any = [];
-    console.log(this.salario);
+    // console.log(this.salario);
 
     this.salario.contribuinte.id = this.contribuinteSelected.id;
     if (this.salarioForm.valid) {
@@ -197,19 +207,15 @@ export class SalariosComponent implements OnInit {
       });
 
       this.salario.componentesIncidencia = valores;
-      console.log(this.salario);
+      // console.log(this.salario);
     } else {
       this.msgService.showError('Erro!');
     }
 
       this.salario.componentesIncidencia.forEach((c) => {
+        // console.log(c)
+        // +c.valorComponente = c.valorComponente.replace(',', '.');
 
-        c.valorComponente = c.valorComponente.replace(',', '.');
-        // if (c.descricao != '' && c.valorComponente!= '') {
-        //   return c;
-        // } else {
-        //   return null;
-        // }
       });
   }
 }

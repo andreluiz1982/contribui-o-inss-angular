@@ -60,7 +60,7 @@ export class AliquotaComponent implements OnInit {
 
   private getAllAliquotas() {
     this.aliquotaService.getAllAliquota().subscribe((r) => {
-      console.log(r.body)
+      // console.log(r.body)
       this.aliquotas = r.body;
     });
   }
@@ -105,7 +105,7 @@ export class AliquotaComponent implements OnInit {
       let fx: FaixaAliquota[] = [];
       this.form.controls.faixasAliquotas.controls.forEach((element) => {
         if (element instanceof FormGroup && element.valid) {
-          console.log(element.valid)
+          // console.log(element.valid)
           let min = element.get('minimo')?.value + '';
           let max = element.get('maximo')?.value + '';
           let aliq = element.get('aliquota')?.value + '';
@@ -114,7 +114,7 @@ export class AliquotaComponent implements OnInit {
         }
       });
       this.aliquota.faixasAliquotas = fx;
-      console.log(this.aliquota)
+      // console.log(this.aliquota)
     }
     this.aliquota.faixasAliquotas.forEach(f => {
         if (f.aliquota != '' && f.valorMaximo != '' && f.valorMinimo != '') {
@@ -154,7 +154,7 @@ export class AliquotaComponent implements OnInit {
     this.cleanFaixasAliquotas();
     if (confirm(`Confirmar atualizar Aliquota ${this.aliquota.anoMes}?`)) {
       this.aliquotaService.updateAliquota(this.aliquota).subscribe((r) => {
-        console.log(r);
+        // console.log(r);
         this.msgService.showSucess(
           `Aliquota ${this.aliquota.anoMes} atualizada com sucesso!`
         );
