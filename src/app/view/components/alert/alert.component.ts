@@ -19,7 +19,7 @@ export class AlertComponent implements OnInit {
         this.msg = r;
         setTimeout(()=> {
           this.msg = '';
-        }, 8000);
+        }, 5000);
       }
     })
 
@@ -29,7 +29,7 @@ export class AlertComponent implements OnInit {
         this.successMsg = r;
         setTimeout(()=> {
           this.successMsg = '';
-        }, 1500);
+        }, 1000);
       }
     })
   }

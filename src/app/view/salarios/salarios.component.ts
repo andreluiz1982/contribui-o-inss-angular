@@ -61,6 +61,7 @@ export class SalariosComponent implements OnInit {
   }
 
     makeForm(){
+      this.salarioForm.reset();
       this.salarioForm = this.formBuilder.group(
         {
           anoMes: ['', [Validators.required, Validators.pattern(/[0-9-]{7}/gm)]],
@@ -74,7 +75,7 @@ export class SalariosComponent implements OnInit {
     }
 
   getComponentesIncidencia() {
-    return this.salarioForm.controls.componentesIncidencia;
+    return this.salarioForm.controls.componentesIncidencia.controls;
   }
   addComponente() {
     this.salarioForm.controls.componentesIncidencia.push(
@@ -86,6 +87,10 @@ export class SalariosComponent implements OnInit {
         descricao: [''],
       })
     );
+  }
+  removeComponente(n : number ){
+    this.getComponentesIncidencia().splice(n, 1);
+
   }
 
   calculaContribuicoesINSS(idContribuinte: string) {
@@ -171,9 +176,8 @@ export class SalariosComponent implements OnInit {
           // this.salario = new SalarioContribuicaoImpl();
           this.loadSalarios(this.salario.contribuinte);
           this.makeForm();
+          this.atualizar = false;
         });
-        this.atualizar = false;
-        // console.log(this.atualizar)
     }
   }
   delete(sal: SalarioContribuicao) {
@@ -212,11 +216,6 @@ export class SalariosComponent implements OnInit {
       this.msgService.showError('Erro!');
     }
 
-      this.salario.componentesIncidencia.forEach((c) => {
-        // console.log(c)
-        // +c.valorComponente = c.valorComponente.replace(',', '.');
-
-      });
   }
 }
 

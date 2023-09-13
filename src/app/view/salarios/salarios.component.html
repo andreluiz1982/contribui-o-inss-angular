@@ -22,57 +22,52 @@
         <div *ngIf="contribuinteSelected.id != ''">
 
           <label class="form-label">Ano-Mês</label>
-          <input class="form-control" accept="text"
-            formControlName="anoMes"
+          <input class="form-control" accept="text" formControlName="anoMes" [ngClass]="{'form-control': true,
+            'border border-2 border-danger': salarioForm.controls['anoMes'].invalid,
+            'border border-2 border-success': salarioForm.controls['anoMes'].valid
+          }" placeholder="Ano-Mês Ex. 2015-02">
 
-            placeholder="Ano-Mês Ex. 2015-02">
+          <div formArrayName="componentesIncidencia">
 
-        <div formArrayName="componentesIncidencia">
-
-          <div
-            *ngFor="let c of getComponentesIncidencia().controls"
-          class="componentes m-1 mt-2 border border-info rounded"
-          >
-          <div [formGroup]="c">
+            <div *ngFor="let c of getComponentesIncidencia(); let i = index"
+              class="componentes m-1 mt-2 border border-info rounded">
+              <div [formGroup]="c">
 
 
-            <label class="form-label">Componente salário - INSS</label>
-            <input
-            class="form-control"
-            accept="number"
-            type="number"
-            placeholder="Digite o valor"
-            formControlName="valorComponente"
-            >
+                <label class="form-label">Componente salário - INSS</label>
+                <input class="form-control" accept="number" type="number" placeholder="Digite o valor"
+                  formControlName="valorComponente" [ngClass]="{'form-control': true,
+            'border border-2 border-danger': c.controls['valorComponente'].invalid,
+            'border border-2 border-success': c.controls['valorComponente'].valid
+          }" (keydown.enter)="enviar()">
 
-            <label class="form-label">Descrição (opcional) </label>
-            <input
-            class="form-control"
-            accept="text"
-            placeholder="Descrição (opcional) Ex. Horas Extraordinárias"
-            formControlName="descricao"
-            (keydown.tab)="addComponente()">
+                <label class="form-label">Descrição (opcional) </label>
+                <input class="form-control" accept="text" placeholder="Descrição (opcional) Ex. Horas Extraordinárias"
+                  formControlName="descricao" (keydown.tab)="addComponente()">
 
+              </div>
+              <div class="d-flex align-items-center">
+
+                <mat-icon class="mat-18" role="button" (click)="removeComponente(i)"
+                  matTooltip="Remove componente">delete-sweep</mat-icon>
+              </div>
+            </div>
+            <button role="button" (click)="addComponente()" matTooltip="Adiciona componente"
+              class="btn btn-lg btn-info m-2 text-light">
+
+              <mat-icon class="material-icons me-2 fs-2">
+                add_circle_outline
+
+              </mat-icon> Componente
+            </button>
           </div>
-          </div>
-          <button role="button" (click)="addComponente()" class="btn btn-lg btn-info m-2 text-light">
-
-            <mat-icon class="material-icons me-2 fs-2">
-              add_circle_outline
-
-            </mat-icon> Componente
-          </button>
         </div>
-      </div>
-    </form>
-      <button class="btn btn-lg btn-success m-3"
-        [disabled]="atualizar ||    salarioForm.controls.anoMes.invalid"
-
+      </form>
+      <button class="btn btn-lg btn-success m-3" [disabled]="atualizar ||   salarioForm.invalid"
         (click)="enviar()">Enviar</button>
 
-        <button class="btn btn-lg btn-warning m-3"
-        [disabled]="salarioForm.controls.anoMes.invalid"
-        *ngIf="atualizar" (click)="update()">Atualizar</button>
+      <button class="btn btn-lg btn-warning m-3" [disabled]="salarioForm.invalid" *ngIf="atualizar"
+        (click)="update()">Atualizar</button>
     </div>
 
 
@@ -106,7 +101,7 @@
 
           </td>
           <td>
-            <mat-icon  (click)="edit(sal)" role="button" class="mat-18">edit</mat-icon>
+            <mat-icon (click)="edit(sal)" role="button" class="mat-18">edit</mat-icon>
             <mat-icon role="button" class="mat-18" (click)="delete(sal)">delete</mat-icon>
 
           </td>

@@ -36,9 +36,10 @@ export class AliquotaComponent implements OnInit {
     ],
   };
   formAliquota = new AliquotaImpl();
+  validationAnoMes =  [Validators.required, Validators.pattern(/^[0-9-]{7}/g)]
 
   form = this.fb.group({
-    anoMes: ['', [Validators.required, Validators.pattern(/^[0-9-]{7}/g)]],
+    anoMes: ['', this.validationAnoMes],
     faixasAliquotas: this.fb.array<FormGroup>([
     ], [Validators.required]),
   }, {validators: [Validators.required]});
@@ -75,12 +76,16 @@ export class AliquotaComponent implements OnInit {
   }
   addFaixas() {
     this.form.controls.faixasAliquotas.controls.push(
-      this.fb.group({
+       this.fb.group( {
         minimo: ['', [Validators.required, Validators.pattern(/^[0-9.,]*/)]],
         maximo: ['', [Validators.required, Validators.pattern(/^[0-9.,]*/)]],
         aliquota: ['',[Validators.required , Validators.pattern(/^[0-9.,]*/)]],
       }, {validators: [Validators.required]})
     );
+  }
+
+  removeFaixa(number : number){
+    this.form.controls.faixasAliquotas.controls.splice(number, 1);
   }
   enviar() {
     this.cleanFaixasAliquotas();
