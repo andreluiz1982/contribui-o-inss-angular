@@ -103,11 +103,10 @@ export class SalariosComponent implements OnInit {
   }
 
   loadSalarios(cont: Contribuinte) {
-    this.contribuinteSelected = cont;
-
-    this.calculaContribuicoesINSS(cont.id);
     this.makeForm();
-    // console.log(this.salarios)
+    this.contribuinteSelected = cont;
+    this.atualizaSelectedContribuinte();
+
   }
 
   enviar() {
@@ -128,7 +127,6 @@ export class SalariosComponent implements OnInit {
       .getContribuinte(+this.contribuinteSelected.id)
       .subscribe((c) => {
         this.contribuinteSelected = c.body;
-        this.calculaContribuicoesINSS(this.contribuinteSelected.id);
       });
   }
 

@@ -31,7 +31,7 @@
 
             <div *ngFor="let c of getComponentesIncidencia(); let i = index"
               class="componentes m-1 mt-2 border border-info rounded">
-              <div [formGroup]="c">
+              <div [formGroup]="c" class="m-2">
 
 
                 <label class="form-label">Componente salário - INSS</label>
@@ -72,7 +72,7 @@
 
 
 
-  </div>
+
 
   <div class="response m-1 col-lg-4  border border-secondary rounded">
     <h3 class="m-2 d-flex justify-content-center align-self-center"> <span
@@ -114,11 +114,16 @@
 
 
   </div>
-
+</div>
 </div>
 
 
-
+<div *ngIf="contribuinteSelected.id != ''">
+  <button
+    class="btn btn-lg btn-success m-3"
+    (click)="calculaContribuicoesINSS(contribuinteSelected.id)"
+    >Calcular Contribuições</button>
+</div>
 
 <div *ngIf="contribuinteSelected.nomeCompleto != ''">
   <table class="table m-1 align-middle">

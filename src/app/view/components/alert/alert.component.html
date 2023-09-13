@@ -1,6 +1,6 @@
 <div *ngIf="msg != ''"
-  class="p-5 text-danger text-bg-secondary position-fixed top-50
-          start-50 translate-middle rounded">
+  class="p-5 mw-75 text-white text-bg-secondary position-fixed top-50
+          start-50 translate-middle border border-danger rounded">
   <mat-icon role="button"
     (click)="msg = ''"
     style="transform: scale(2);"
@@ -12,8 +12,8 @@
 
 
 <div *ngIf="successMsg != ''"
-  class="p-5 text-light text-bg-success position-fixed top-50
-          start-50 translate-middle rounded">
+  class="p-5 mw-75 text-light text-bg-success position-fixed top-50
+          start-50 translate-middle border border-success rounded">
   <mat-icon role="button"
     (click)="successMsg = ''"
     style="transform: scale(2);"
